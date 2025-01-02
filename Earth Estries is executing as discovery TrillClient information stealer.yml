@@ -1,0 +1,28 @@
+title: Earth Estries is executing as discovery TrillClient information stealer
+id: e301f196-00b8-4bb4-bec2-507b17e4aeb9
+status: experimental
+description: Detects the collection profiles user credentials that can be used to further its objectives. The threat actor employs the TrillClient information stealer for this routine, primarily collecting user credentials from browser user profiles. TrillClient launches a PowerShelll script that will collect user profiles to be saved at a specific location:.
+author: SIMKRA
+references:
+    - https://www.trendmicro.com/en_us/research/24/k/breaking-down-earth-estries-persistent-ttps-in-prolonged-cyber-o.html
+tags:
+    - attack.attack.credential-access 
+    - attack.attack.execution 
+    - attack.t1059.001 
+    - attack.attack.t1555.003 
+logsource:
+    #service:
+    category: ps_script
+    product: windows
+detection:
+    selection:
+        Image|endswith:
+            - 'C:\Windows\system32\powershell.exe'
+        CommandLine|contains|all:
+            - 'attrib -a -s -r -h \"$copy_dest_path\$win_user_path\*\" /S /D'
+            - '\"$copy_dest_path\$win_user_path\'
+            - '\AppData\Local\Google\Chrome\User Data' 
+    condition: selection
+falsepositives:
+    - none
+level: medium
