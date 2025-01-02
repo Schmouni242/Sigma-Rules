@@ -1,0 +1,27 @@
+title: Earth Estries executing PortScan
+id: 698db959-b20d-4972-9498-37cb81fef4f4
+status: experimental
+description: Detects PortScan with the specified open ports.
+author: SIMKRA
+references:
+    - https://www.trendmicro.com/en_us/research/24/k/breaking-down-earth-estries-persistent-ttps-in-prolonged-cyber-o.html
+tags:
+    - attack.discovery 
+    - attack.t1595.002
+logsource:
+    #service:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith:
+            - 'portscan.exe'
+        CommandLine|contains:
+            - '//mail.ocac.org.pk/Portscan.docx'
+            - '445,3389,80,443'
+            - '445,3389,80,443 >1.log'
+            - '445,3389,80,443" >>1.log'
+    condition: selection
+falsepositives:
+    - none
+level: medium
