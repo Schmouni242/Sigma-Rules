@@ -1,0 +1,25 @@
+title: Earth Estries installation Cobalt Strike with Windows Service
+id: e8fe8657-2f3c-4c2b-b6b3-6ad0cfc48660
+status: experimental
+description: Detects the type of installation with a Windows Service for persistence and execution
+author: SIMKRA
+references:
+    - https://www.trendmicro.com/en_us/research/24/k/breaking-down-earth-estries-persistent-ttps-in-prolonged-cyber-o.html
+tags:
+    - attack.execution 
+    - attack.t1543   
+logsource:
+    #service:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith:
+            - 'C:\Windows\system32\sc.exe'
+        CommandLine|contains:
+            - 'sc create pasrv binpath='
+            - '"cmd /c \"start msiexec.exe /y C:\Windows\PLA\Performance.dll\"" start= auto displayname= "Microsoft Performance Alerts Server"'
+    condition: selection
+falsepositives:
+    - none
+level: medium
