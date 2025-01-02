@@ -1,0 +1,25 @@
+title: Earth Estries Rundll32.exe loaders to deploy Cobalt Strike
+id: 5a318040-d352-49aa-9f30-123183278816
+status: experimental
+description: Detects A DLL version of the loader which could also be deployed to load Cobalt Strike. This involves a scheduled task added via command line for persistence
+author: SIMKRA
+references:
+    - https://www.trendmicro.com/en_us/research/24/k/breaking-down-earth-estries-persistent-ttps-in-prolonged-cyber-o.html
+tags:
+    - attack.defense-evasion 
+    - attack.t1218.011  
+logsource:
+    #service:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith:
+            - 'C:\Windows\system32\cmd.exe'
+        CommandLine|contains|all:
+            - '/C sc create VMware binpath= \"rundll32.exe C:\\Progra~1\\VMware\\vmtools.dll'
+            - 'start= auto displayname= \"VMware\'
+    condition: selection
+falsepositives:
+    - none
+level: medium
