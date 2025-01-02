@@ -1,0 +1,28 @@
+title: LOLBAS Chinese APT Succesful Logon on Host
+id: ca23c06c-c6c9-49e8-9406-217f13fb0a38
+status: experimental
+description: Detects the PowerShell command to identify successful logons to the host.
+references:
+    - https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-144a
+author: SIMKRA, @simonekrausora1
+date: 2023/11/11
+tags:
+    - attack.discovery
+    - attack.t1059.001
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        - Image|endswith: '\powershell.exe'
+        - OriginalFileName: 'powershell.exe'
+    selection_flag:
+        CommandLine|contains: 'Get-EventLog'
+    selection_key:
+        CommandLine|contains:
+            - 'Get-EventLog security -instanceid 4624' 
+            - 'Get-Eventlog security'
+    condition: all of selection_*
+falsepositives:
+    - not known
+level: high

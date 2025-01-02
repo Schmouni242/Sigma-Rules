@@ -1,0 +1,32 @@
+title: Portproxy add command
+id: 9efc7314-5c90-4c7b-9131-ef311b7f45a9
+status: experimental
+description: Chinese APT use portproxy commands to enable port forwarding on a host.
+references:
+    - https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-144a
+author: SIMKRA, @SIMKRA202
+date: 2023/11/11
+tags:
+    - attack.command_and_control #TA0011
+    - attack.t1090
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        - Image|endswith: '\cmd.exe'
+        - OriginalFileName: 'cmd.exe'
+    selection_cli:
+        CommandLine|contains|all:
+            - 'netsh '
+            - 'interface '
+            - 'portproxy '
+        CommandLine|contains:
+            - 'add '
+            - 'listenport '
+            - 'connetaddress= '
+            - 'connectport=1433'
+    condition: all of selection_*
+falsepositives:
+    - Administrative activity
+level: high

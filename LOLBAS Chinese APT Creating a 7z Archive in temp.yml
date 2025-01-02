@@ -1,0 +1,27 @@
+title: LOLBAS Chinese APT Creating a 7z Archive in temp
+id: 805be6dd-20d2-42dc-b70a-b058ae83002b
+status: experimental
+description: Detects the suspicious creation of a 7z achrive into the c:\windows\temp\ folder.
+references:
+    - https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-144a
+author: SIMKRA, @SIMKRA202
+date: 2023/11/11
+tags:
+    - attack.attack.collection 
+    - attack.attack.attack.t1560 
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        - Image|endswith: '\7z.exe'
+        - OriginalFileName: '7z.exe'
+    selection_flag:
+        CommandLine|contains: 'a -p'
+    selection_key:
+        CommandLine|contains|all:
+            - 'c:\windows\temp\' 
+    condition: all of selection_*
+falsepositives:
+    - not known
+level: high

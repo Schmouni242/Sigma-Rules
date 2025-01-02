@@ -1,0 +1,28 @@
+title: LOLBAS Chinese APT PowerShell Hidden RAR Execution
+id: 01c9fdaa-9e4a-4499-b2da-c469d6b77868
+status: experimental
+description: Detects the PowerShell command to hidden executes from a temp folder an a.bat with rar.exe.
+references:
+    - https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-144a
+author: SIMKRA, @SIMKRA202
+date: 2023/11/11
+tags:
+    - attack.defense_evasion #TA0005
+    - attack.1059.001
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        - Image|endswith: '\powershell.exe'
+        - OriginalFileName: 'powershell.exe'
+    selection_flag:
+        CommandLine|contains: 'start-process'
+    selection_key:
+        CommandLine|contains|all:
+            - 'filepath c:\windows\temp\'
+            - 'windowstyle Hidden rar.exe' 
+    condition: all of selection_*
+falsepositives:
+    - not known
+level: high
