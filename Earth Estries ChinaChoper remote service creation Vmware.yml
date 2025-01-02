@@ -1,0 +1,27 @@
+title: Earth Estries ChinaChoper remote service creation Vmware
+id: 8c63daeb-f18c-49f3-9992-d75ed928408a
+status: experimental
+description: Detects remotely the creation of services for persistence and privilege escalation. From the configuration of the created service, the malicious loader, vmvssrv.exe (a malicious loader written in .NET assembly) is launched by using Intallutil.exe, which is a built-in installation utility in Windows system. The vmvssrv.exe loader will then load and launch Cobalt Strike to compromise the target machine
+author: SIMKRA
+references:
+    - https://www.trendmicro.com/en_us/research/24/k/breaking-down-earth-estries-persistent-ttps-in-prolonged-cyber-o.html
+tags:
+    - attack.privilege-escalation 
+    - attack.execution
+    - attack.t1569.002
+logsource:
+    #service:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        CommandLine|contains|all:
+            - '"cmd" /c cd /d "c:\Windows\IME\IMEJP\"&net use \\'
+            - '"cmd" /c cd /d "c:\Windows\IME\IMEJP\"&copy v*.* \\ '
+            - 'vmware'
+            - 'create VGAuthtools type= own start= auto binpath= "c:\windows\microsoft.net\Framework\'
+            - 'Installutil.exe C:\Programdata\VMware\vmvssrv.exe'
+    condition: selection
+falsepositives:
+    - none
+level: medium
