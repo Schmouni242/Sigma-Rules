@@ -1,0 +1,26 @@
+title: Earth Estries remote scheduled task Vmware for persistence
+id: 18af4ef8-7820-4254-9b6a-05789e9936ce
+status: experimental
+description: Detects using ChinaChopper to remotely create scheduled tasks for persistence
+author: SIMKRA
+references:
+    - https://www.trendmicro.com/en_us/research/24/k/breaking-down-earth-estries-persistent-ttps-in-prolonged-cyber-o.html
+tags:
+    - attack.persistence 
+    - attack.execution
+    - attack.t1053.005
+logsource:
+    #service:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith:
+           - 'schtasks.exe'
+        CommandLine|contains|all:
+            - 'schtasks /create /tn VMware\vmtools /tr "cmd /c \"start C:\Programdata\VMware\vmtools.exe\"" /sc onstart /ru "" /S'
+            - 'cd&echo'
+    condition: selection
+falsepositives:
+    - none
+level: medium
