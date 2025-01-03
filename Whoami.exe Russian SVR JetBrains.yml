@@ -1,0 +1,29 @@
+title: Whoami.exe Russian SVR JetBrains
+id: 07c58486-f34e-440c-8dc4-aeb12d157d89
+status: experimental
+description: Detects the execution of "whoami.exe" with several reconnaissance commands
+references:
+    - https://www.cisa.gov/sites/default/files/2023-12/aa23-347a-russian-foreign-intelligence-service-svr-exploiting-jetbrains-teamcity-cve-globally_0.pdf
+        -https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/whoami
+date: 2023/12/16
+author: SIMKRA
+tags:
+    - attack.discovery
+    - attack.t1033
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        - Image|endswith: '\whoami.exe'
+        - OriginalFileName: 'whoami.exe'
+    selection_main_cli:
+        CommandLine|contains:
+            - ' /priv'
+            - ' /all'
+            - ' /groups'
+            - ' /domain'
+    condition: selection and selection_main_cli
+falsepositives:
+    - Unknown
+level: high

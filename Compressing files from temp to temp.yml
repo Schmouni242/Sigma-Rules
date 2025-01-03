@@ -1,0 +1,12 @@
+title: Compressing files from temp to temp
+description: Compressing files from temp\ to temp used by SVR to prepare data to be exfiltrated
+logsource:
+    #service:
+    category: ps_script
+    product: windows
+detection:
+    selection:
+     ScriptBlockText|re: 
+      '.*Compress\-Archive.*Path.*Windows\\[Tt]{1}emp\\[1-9]{1}.*DestinationPath.*Windows\\[Tt]{1}emp\\.*'
+    condition: selection
+    falsepositives: no

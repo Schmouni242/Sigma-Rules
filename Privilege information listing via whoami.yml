@@ -1,0 +1,16 @@
+title:  Privilege information listing via whoami
+description: Detects whoami.exe execution and listing of privileges
+author: CISA
+logsource:
+    #service:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith:
+            - whoami.exe'
+        CommandLine|contains:
+            - 'priv'
+            - 'Priv'
+    condition: selection
+    falsepositives: legitimate use by system administrator

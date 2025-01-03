@@ -1,0 +1,19 @@
+title: Sensitive registry entries saved to file
+description: Sensitive registry entries saved to file
+logsource:
+    #service:
+    category: process_creation
+    product: windows
+detection:
+    selection_base:
+     Image|endswith:
+      - 'reg.exe'
+     CommandLine|contains: 
+      'save'
+     CommandLine|re: 
+      '.*HKLM\\SYSTEM.*|.*HKLM\\SECURITY.*|.*HKLM\\SAM.*'
+    selection_file:
+     CommandLine|re: 
+      '.*sy\.sa.*|.*sam\.sa.*|.*se\.sa.*'
+    condition: selection_base and selection_file
+    falsepositives: no

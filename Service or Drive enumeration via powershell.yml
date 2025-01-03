@@ -1,0 +1,19 @@
+title: Service or Drive enumeration via powershell
+description: Service or Drive enumeration via powershell
+logsource:
+    #service:
+    category: ps_script
+    product: windows
+detection:
+    selection_1:
+      ScriptBlockText|contains|all:
+         - 'Get-WmiObject'
+         - '-Class'
+         - 'Win32_Service'
+    selection_2:
+       ScriptBlockText|contains|all:
+          - 'Get-WindowsDriver'
+          - '-Online'
+          - '-All'
+    condition: selection_1 or selection_2
+    falsepositives: legitimate use by system administrator

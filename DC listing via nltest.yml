@@ -1,0 +1,12 @@
+title: DC listing via nltest
+logsource:
+    #service:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith:
+            - 'nltest.exe'
+        CommandLine|re:
+            - '.*dclist\:.*|.*DCLIST\:.*|.*dsgetdc\:.*|.*DSGETDC\:.*'
+    condition: selection

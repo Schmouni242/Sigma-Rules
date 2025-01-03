@@ -1,0 +1,14 @@
+title: DLL execution via WMI
+logsource:
+    #service:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith:
+            - 'WMIC.exe'
+        CommandLine|contains:
+           - 'call'
+           - 'rundll32'
+    condition: selection
+falsepositives: legitimate use by software or system administrator

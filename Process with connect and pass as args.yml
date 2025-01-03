@@ -1,0 +1,12 @@
+title: Process with connect and pass as args
+logsource:
+    #service:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        CommandLine|contains|all:
+           - 'pass'
+           - 'connect'
+    condition: selection
+falsepositives: legitimate use of rsockstun or software with exact same arguments
