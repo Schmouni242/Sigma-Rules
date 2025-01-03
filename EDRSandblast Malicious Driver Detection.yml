@@ -1,0 +1,17 @@
+title: EDRSandblast Malicious Driver Detection
+description: Detects loading of the droppped driver WNBIOS.sys and the driver for EDRSandblast
+references:
+    - https://github.com/wavestone-cdt/EDRSandblast
+logsource:
+    #service:
+    category: driver_load
+    product: windows
+detection:
+    selection:
+        Image|endswith:
+            - 'WNBIOS.sys'
+            - 'ntkrnlmp.pdb'
+            - 'GDRV.sys'
+            - 'RTCore64.sys'
+            - 'DBUtil_2_3.sys'
+    condition: selection
